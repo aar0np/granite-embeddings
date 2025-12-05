@@ -83,8 +83,7 @@ async def generate_embedding(data: Dict[str, Any]):
             content={"error": str(ex)}
         )
 
-with gradio.Blocks(title="Multi-Model Text Embeddings", css_path="./style.css") as gradio_app:
-    gradio.Markdown("# Multi-Model Text Embeddings")
+with gradio.Blocks(title="Aaron's Granite Text Embeddings service") as gradio_app:
     gradio.Markdown("Generate embeddings for your text using the IBM Granite embedding models.")
     
     # Model selector dropdown (allows custom input)
@@ -109,83 +108,6 @@ with gradio.Blocks(title="Multi-Model Text Embeddings", css_path="./style.css") 
     submit_btn.click(embed, inputs=[text_input, model_dropdown], outputs=output, api_name="predict")
     text_input.submit(embed, inputs=[text_input, model_dropdown], outputs=output)
     
-    # Add API usage guide
-    gradio.Markdown("## API Usage")
-    gradio.Markdown("""
-    You can use this API in two ways: via the direct FastAPI endpoint or through Gradio clients.
-    
-    ### List Available Models
-    ```bash
-    curl https://aploetz-granite-embeddings.hf.space/models
-    ```
-    
-    ### Direct API Endpoint (No Queue!)
-    ```bash
-    # Default model (nomic-ai/nomic-embed-text-v1.5)
-    curl -X POST https://ipepe-nomic-embeddings.hf.space/embed \
-      -H "Content-Type: application/json" \
-      -d '{"text": "Your text to embed goes here"}'
-    
-    # With predefined model (trust_remote_code allowed)
-    curl -X POST https://ipepe-nomic-embeddings.hf.space/embed \
-      -H "Content-Type: application/json" \
-      -d '{"text": "Your text to embed goes here", "model": "sentence-transformers/all-MiniLM-L6-v2"}'
-    
-    # With any Hugging Face model (trust_remote_code=False for security)
-    curl -X POST https://ipepe-nomic-embeddings.hf.space/embed \
-      -H "Content-Type: application/json" \
-      -d '{"text": "Your text to embed goes here", "model": "intfloat/e5-base-v2"}'
-    ```
-    
-    Response format:
-    ```json
-    {
-      "embedding": [0.123, -0.456, ...],
-      "dim": 384,
-      "model": "sentence-transformers/all-MiniLM-L6-v2",
-      "trust_remote_code": false,
-      "predefined": true
-    }
-    ```
-    
-    ### Python Example (Direct API)
-    ```python
-    import requests
-    
-    # List available models
-    models = requests.get("https://ipepe-nomic-embeddings.hf.space/models").json()
-    print(models["models"])
-    
-    # Generate embedding with specific model
-    response = requests.post(
-        "https://ipepe-nomic-embeddings.hf.space/embed",
-        json={
-            "text": "Your text to embed goes here",
-            "model": "BAAI/bge-small-en-v1.5"
-        }
-    )
-    result = response.json()
-    embedding = result["embedding"]
-    ```
-    
-    ### Python Example (Gradio Client)
-    ```python
-    from gradio_client import Client
-    
-    client = Client("ipepe/nomic-embeddings")
-    result = client.predict(
-        "Your text to embed goes here",
-        "nomic-ai/nomic-embed-text-v1.5",  # model selection
-        api_name="/predict"
-    )
-    print(result)  # Returns the embedding array
-    ```
-    
-    ### Available Models
-    - `ibm-granite/granite-embedding-30m-english` - IBM Granite 30M English embedding model
-    - `ibm-granite/granite-embedding-278m-multilingual` - IBM Granite 278M multilingual embedding model
-    """)
-
 if __name__ == '__main__':
     # Mount FastAPI app to Gradio
     gradio_app = gradio.mount_gradio_app(app, gradio_app, path="/")
