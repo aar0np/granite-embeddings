@@ -77,10 +77,10 @@ async def generate_embedding(data: Dict[str, Any]):
                 }
         )
         
-    except Exception as e:
+    except Exception as ex:
         return JSONResponse(
             status_code=500,
-            content={"error": str(e)}
+            content={"error": str(ex)}
         )
 
 with gradio.Blocks(title="Multi-Model Text Embeddings", css="""
@@ -94,8 +94,7 @@ with gradio.Blocks(title="Multi-Model Text Embeddings", css="""
     }
 """) as gradio_app:
     gradio.Markdown("# Multi-Model Text Embeddings")
-    gradio.Markdown("Generate embeddings for your text using 28+ state-of-the-art embedding models including top MTEB performers like NV-Embed-v2, gte-Qwen2-7B-instruct, Nomic, BGE, Snowflake, IBM Granite, Qwen3, Stella, and more.")
-    gradio.Markdown(f"**Device**: {DEVICE.upper()} {'🚀' if DEVICE == 'cuda' else '💻'}")
+    gradio.Markdown("Generate embeddings for your text using the IBM Granite embedding models.")
     
     # Model selector dropdown (allows custom input)
     model_dropdown = gradio.Dropdown(
@@ -192,20 +191,6 @@ with gradio.Blocks(title="Multi-Model Text Embeddings", css="""
     ```
     
     ### Available Models
-    - `nomic-ai/nomic-embed-text-v1.5` (default) - High-performing open embedding model with large token context
-    - `nomic-ai/nomic-embed-text-v1` - Previous version of Nomic embedding model
-    - `mixedbread-ai/mxbai-embed-large-v1` - State-of-the-art large embedding model from mixedbread.ai
-    - `BAAI/bge-m3` - Multi-functional, multi-lingual, multi-granularity embedding model
-    - `sentence-transformers/all-MiniLM-L6-v2` - Fast, small embedding model for general use
-    - `sentence-transformers/all-mpnet-base-v2` - Balanced performance embedding model
-    - `Snowflake/snowflake-arctic-embed-m` - Medium-sized Arctic embedding model
-    - `Snowflake/snowflake-arctic-embed-l` - Large Arctic embedding model
-    - `Snowflake/snowflake-arctic-embed-m-long` - Medium Arctic model optimized for long context
-    - `Snowflake/snowflake-arctic-embed-m-v2.0` - Latest Arctic embedding with multilingual support
-    - `BAAI/bge-large-en-v1.5` - Large BGE embedding model for English
-    - `BAAI/bge-base-en-v1.5` - Base BGE embedding model for English
-    - `BAAI/bge-small-en-v1.5` - Small BGE embedding model for English
-    - `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` - Multilingual paraphrase model
     - `ibm-granite/granite-embedding-30m-english` - IBM Granite 30M English embedding model
     - `ibm-granite/granite-embedding-278m-multilingual` - IBM Granite 278M multilingual embedding model
     """)
@@ -216,4 +201,4 @@ if __name__ == '__main__':
     
     # Run with Uvicorn (Gradio uses this internally)
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=7860)
+    uvicorn.run(gradio_app, host="0.0.0.0", port=7860)
