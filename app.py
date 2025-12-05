@@ -83,16 +83,7 @@ async def generate_embedding(data: Dict[str, Any]):
             content={"error": str(ex)}
         )
 
-with gradio.Blocks(title="Multi-Model Text Embeddings", css="""
-    .json-holder {
-        max-height: 400px !important;
-        overflow-y: auto !important;
-    }
-    .json-holder .wrap {
-        max-height: 400px !important;
-        overflow-y: auto !important;
-    }
-""") as gradio_app:
+with gradio.Blocks(title="Multi-Model Text Embeddings", css_path="./style.css") as gradio_app:
     gradio.Markdown("# Multi-Model Text Embeddings")
     gradio.Markdown("Generate embeddings for your text using the IBM Granite embedding models.")
     

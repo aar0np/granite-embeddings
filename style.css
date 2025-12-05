@@ -1,0 +1,8 @@
+.json-holder {
+    max-height: 400px !important;
+    overflow-y: auto !important;
+}
+.json-holder .wrap {
+    max-height: 400px !important;
+    overflow-y: auto !important;
+}
